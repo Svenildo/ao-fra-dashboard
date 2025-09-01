@@ -20,7 +20,7 @@ themeToggle.addEventListener("click", () => {
 
 async function fetchData() {
   try {
-    const res = await fetch("https://api.afra.finance/opportunities");
+    const res = await fetch("https://api.your.site");
     const json = await res.json();
     allData = json.result.table || {};
 

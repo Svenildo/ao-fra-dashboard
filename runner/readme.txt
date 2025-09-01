@@ -61,7 +61,7 @@ Configuration
 
 In ao-api.cjs, configure the following:
 
-   const TARGET_PROCESS_ID = 'Pf2l3pPnlUz_Ccz81BKvOljT_EoyAD191P4W-L-oL6Q';
+   const TARGET_PROCESS_ID = 'your agent PID';
    const POLL_INTERVAL = 5000; // in milliseconds
 
 Dependencies Summary

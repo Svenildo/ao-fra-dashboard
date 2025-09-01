@@ -1,0 +1,7 @@
+Create Arweave Wallet:
+sudo apt update
+sudo apt install nodejs npm -y
+
+npm install -g arweave-cli
+
+arweave keygen wallet.json

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Afra Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>Funding Rate Arbitrage Dashboard</h1>
+      <p class="powered-by">Powered by AO</p>
+      <button id="toggleTheme" class="btn secondary small">🌓 Toggle Theme</button>
+    </section>
+
+    <section class="filters">
+      <label>
+        <strong>Pair:</strong>
+        <select id="pairSelect"></select>
+      </label>
+      <label>
+        <strong>Risk:</strong>
+        <select id="riskSelect">
+          <option value="ALL">All</option>
+          <option value="LOW">Low</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="HIGH">High</option>
+        </select>
+      </label>
+      <label>
+        <strong>Search:</strong>
+        <input type="text" id="pairSearch" placeholder="Search pair..." />
+      </label>
+    </section>
+
+    <section class="filters dex-filters">
+      <strong>DEXs:</strong><br/>
+      <label><input type="checkbox" value="aevo" checked /> aevo</label>
+      <label><input type="checkbox" value="backpack" checked /> backpack</label>
+      <label><input type="checkbox" value="dydx" checked /> dydx</label>
+      <label><input type="checkbox" value="extended" checked /> extended</label>
+      <label><input type="checkbox" value="hyperliquid" checked /> hyperliquid</label>
+      <label><input type="checkbox" value="orderly" checked /> orderly</label>
+      <label><input type="checkbox" value="paradex" checked /> paradex</label>
+    </section>
+
+    <section class="card">
+      <h2>Top Opportunity</h2>
+      <div class="table-wrapper">
+        <table id="topOpportunityTable">
+          <thead>
+            <tr>
+              <th>Pair</th>
+              <th>APR (%)</th>
+              <th>Long</th>
+              <th>Short</th>
+              <th>Risk</th>
+            </tr>
+          </thead>
+          <tbody id="topOpportunityBody">
+            <tr>
+              <td colspan="5" style="text-align:center;">Loading...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>All Opportunities</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Pair</th>
+              <th>Long</th>
+              <th>Short</th>
+              <th>APR (%)</th>
+              <th>Risk</th>
+            </tr>
+          </thead>
+          <tbody id="opportunityTableBody">
+            <tr>
+              <td colspan="5" style="text-align: center;">Loading data...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="footer">
+      © 2025 Afra Finance — All rights reserved
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

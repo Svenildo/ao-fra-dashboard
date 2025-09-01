@@ -7,7 +7,7 @@
 local json = require("json")
 
 -- –––– Configuration ––––
-local DEFAULT_PAIR       = "ETH"   -- ⚠️ Change per agent
+local DEFAULT_PAIR       = "BTC"   -- ⚠️ Change paire (BTC, ETH...), one paire per agent
 local DEXS               = { "hyperliquid", "aevo", "backpack", "orderly", "dydx", "paradex", "extended" }
 local PERIODS_PER_YEAR   = 3 * 365
 local DEFAULT_FEES       = { maker = 0.0002, taker = 0.0005 }

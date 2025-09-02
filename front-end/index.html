@@ -1,99 +1,904 @@
 <!DOCTYPE html>
+
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Afra Dashboard</title>
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Base Theme Variables */
+    :root {
+      --bg: #ffffff;
+      --text: #1f2937;
+      --card-bg: #f9fafb;
+      --border: #e5e7eb;
+      --header-bg: #f3f4f6;
+      --accent: #2563eb;
+      --accent-text: white;
+      --table-stripe: #f9f9f9;
+      --success: #22c55e;
+      --long-color: #22c55e;
+      --short-color: #ef4444;
+      --warning: #f59e0b;
+    }
+
+```
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --text: #e2e8f0;
+  --card-bg: #1e293b;
+  --border: #334155;
+  --header-bg: #1e293b;
+  --accent: #3b82f6;
+  --accent-text: white;
+  --table-stripe: #1f2937;
+  --success: #4ade80;
+  --long-color: #4ade80;
+  --short-color: #f87171;
+  --warning: #fbbf24;
+}
+
+/* Body and Layout */
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Hero Section */
+.hero {
+  text-align: center;
+  padding: 1rem;
+  position: relative;
+}
+.hero h1 {
+  font-size: 2.25rem;
+  margin-bottom: 0.25rem;
+}
+.powered-by {
+  font-size: 1rem;
+  color: var(--text);
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Status indicator */
+.status-indicator {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--success);
+}
+
+.status-indicator.offline {
+  background-color: var(--short-color);
+}
+
+.status-indicator.loading {
+  background-color: var(--warning);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Last update info */
+.last-update {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin-top: 0.25rem;
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0 1rem;
+}
+.filters label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.filters select,
+.filters input[type="text"] {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background-color: var(--card-bg);
+  color: var(--text);
+  transition: border-color 0.2s ease;
+}
+
+.filters select:focus,
+.filters input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* DEX Checkboxes */
+.dex-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+.dex-filters label {
+  background-color: var(--card-bg);
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+.dex-filters label:hover {
+  border-color: var(--accent);
+}
+.dex-filters input[type="checkbox"] {
+  margin-right: 0.25rem;
+}
+
+/* Cards */
+.card {
+  background-color: var(--card-bg);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid var(--border);
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+.card h2 {
+  margin-top: 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* Loading state */
+.loading {
+  opacity: 0.6;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: loading-shimmer 1.5s infinite;
+}
+
+[data-theme="dark"] .loading::after {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+
+@keyframes loading-shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* Tables */
+.table-wrapper {
+  overflow-x: auto;
+  margin-top: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+th,
+td {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  background-color: var(--header-bg);
+  font-weight: bold;
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+th:hover {
+  background-color: var(--border);
+}
+
+th.sortable::after {
+  content: '↕️';
+  position: absolute;
+  right: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+th.sort-asc::after {
+  content: '↑';
+  opacity: 1;
+}
+
+th.sort-desc::after {
+  content: '↓';
+  opacity: 1;
+}
+
+tr:nth-child(even) {
+  background-color: var(--table-stripe);
+}
+
+tr:hover {
+  background-color: var(--border);
+}
+
+/* DEX Colors */
+.dex-long {
+  color: var(--long-color);
+  font-weight: 600;
+}
+
+.dex-short {
+  color: var(--short-color);
+  font-weight: 600;
+}
+
+/* Risk indicators */
+.risk-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.risk-low::before {
+  content: '🟢';
+}
+
+.risk-medium::before {
+  content: '🟡';
+}
+
+.risk-high::before {
+  content: '🔴';
+}
+
+/* APR highlighting */
+.apr-value {
+  font-weight: bold;
+  color: var(--success);
+}
+
+.apr-high {
+  background: linear-gradient(135deg, var(--success), #16a34a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+/* Buttons */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+.btn.primary {
+  background-color: var(--accent);
+  color: var(--accent-text);
+}
+.btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.btn.secondary {
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  background-color: transparent;
+}
+.btn.secondary:hover {
+  background-color: var(--accent);
+  color: var(--accent-text);
+}
+.btn.small {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+}
+
+/* Export button */
+.export-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+/* Search Input */
+#pairSearch {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background-color: var(--card-bg);
+  color: var(--text);
+  margin-left: 1rem;
+  min-width: 180px;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  margin-top: 3rem;
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+/* Notifications */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: 500;
+  z-index: 1000;
+  transform: translateX(400px);
+  transition: transform 0.3s ease;
+}
+
+.notification.show {
+  transform: translateX(0);
+}
+
+.notification.success {
+  background-color: var(--success);
+}
+
+.notification.error {
+  background-color: var(--short-color);
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .hero h1 {
+    font-size: 1.75rem;
+  }
+
+  table th,
+  table td {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dex-filters {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+
+  #pairSearch {
+    margin-top: 0.5rem;
+    margin-left: 0;
+  }
+
+  .export-btn {
+    position: static;
+    margin-top: 1rem;
+  }
+}
+```
+
+  </style>
 </head>
 <body>
   <div class="container">
     <section class="hero">
       <h1>Funding Rate Arbitrage Dashboard</h1>
-      <p class="powered-by">Powered by AO</p>
-      <button id="toggleTheme" class="btn secondary small">🌓 Toggle Theme</button>
-    </section>
-
-    <section class="filters">
-      <label>
-        <strong>Pair:</strong>
-        <select id="pairSelect"></select>
-      </label>
-      <label>
-        <strong>Risk:</strong>
-        <select id="riskSelect">
-          <option value="ALL">All</option>
-          <option value="LOW">Low</option>
-          <option value="MEDIUM">Medium</option>
-          <option value="HIGH">High</option>
-        </select>
-      </label>
-      <label>
-        <strong>Search:</strong>
-        <input type="text" id="pairSearch" placeholder="Search pair..." />
-      </label>
-    </section>
-
-    <section class="filters dex-filters">
-      <strong>DEXs:</strong><br/>
-      <label><input type="checkbox" value="aevo" checked /> aevo</label>
-      <label><input type="checkbox" value="backpack" checked /> backpack</label>
-      <label><input type="checkbox" value="dydx" checked /> dydx</label>
-      <label><input type="checkbox" value="extended" checked /> extended</label>
-      <label><input type="checkbox" value="hyperliquid" checked /> hyperliquid</label>
-      <label><input type="checkbox" value="orderly" checked /> orderly</label>
-      <label><input type="checkbox" value="paradex" checked /> paradex</label>
-    </section>
-
-    <section class="card">
-      <h2>Top Opportunity</h2>
-      <div class="table-wrapper">
-        <table id="topOpportunityTable">
-          <thead>
-            <tr>
-              <th>Pair</th>
-              <th>APR (%)</th>
-              <th>Long</th>
-              <th>Short</th>
-              <th>Risk</th>
-            </tr>
-          </thead>
-          <tbody id="topOpportunityBody">
-            <tr>
-              <td colspan="5" style="text-align:center;">Loading...</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="powered-by">
+        Powered by AO
+        <span class="status-indicator" id="statusIndicator"></span>
       </div>
-    </section>
+      <div class="last-update" id="lastUpdate"></div>
 
-    <section class="card">
-      <h2>All Opportunities</h2>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Pair</th>
-              <th>Long</th>
-              <th>Short</th>
-              <th>APR (%)</th>
-              <th>Risk</th>
-            </tr>
-          </thead>
-          <tbody id="opportunityTableBody">
-            <tr>
-              <td colspan="5" style="text-align: center;">Loading data...</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
+```
+  <button id="exportBtn" class="btn primary small export-btn">📥 Export CSV</button>
+</section>
 
-    <footer class="footer">
-      © 2025 My Site — All rights reserved
-    </footer>
+<section class="filters">
+  <label>
+    <strong>Pair:</strong>
+    <select id="pairSelect"></select>
+  </label>
+  <label>
+    <strong>Risk:</strong>
+    <select id="riskSelect">
+      <option value="ALL">All</option>
+      <option value="LOW">🟢 Low</option>
+      <option value="MEDIUM">🟡 Medium</option>
+      <option value="HIGH">🔴 High</option>
+    </select>
+  </label>
+  <label>
+    <strong>Search:</strong>
+    <input type="text" id="pairSearch" placeholder="Search pair..." />
+  </label>
+</section>
+
+<section class="filters dex-filters">
+  <strong>DEXs:</strong>
+  <label><input type="checkbox" value="aevo" checked /> aevo</label>
+  <label><input type="checkbox" value="backpack" checked /> backpack</label>
+  <label><input type="checkbox" value="dydx" checked /> dydx</label>
+  <label><input type="checkbox" value="extended" checked /> extended</label>
+  <label><input type="checkbox" value="hyperliquid" checked /> hyperliquid</label>
+  <label><input type="checkbox" value="orderly" checked /> orderly</label>
+  <label><input type="checkbox" value="paradex" checked /> paradex</label>
+</section>
+
+<section class="card">
+  <h2>🏆 Top Opportunity</h2>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Pair</th>
+          <th>APR (%)</th>
+          <th>Long</th>
+          <th>Short</th>
+          <th>Risk</th>
+        </tr>
+      </thead>
+      <tbody id="topOpportunityTableBody">
+        <tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card">
+  <h2>📊 All Opportunities</h2>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th class="sortable" data-column="pair">Pair</th>
+          <th class="sortable" data-column="long">Long</th>
+          <th class="sortable" data-column="short">Short</th>
+          <th class="sortable" data-column="apr">APR (%)</th>
+          <th class="sortable" data-column="risk">Risk</th>
+        </tr>
+      </thead>
+      <tbody id="opportunityTableBody">
+        <tr>
+          <td colspan="5" style="text-align: center;">Loading data...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="footer">
+  © 2025 Afra Finance — All rights reserved
+</footer>
+```
+
   </div>
 
-  <script src="script.js"></script>
+  <div id="notification" class="notification"></div>
+
+  <script>
+    const pairSelect = document.getElementById("pairSelect");
+    const riskSelect = document.getElementById("riskSelect");
+    const dexCheckboxes = document.querySelectorAll(".dex-filters input[type=checkbox]");
+    const pairSearch = document.getElementById("pairSearch");
+    const tableBody = document.getElementById("opportunityTableBody");
+    const topOpportunityTableBody = document.getElementById("topOpportunityTableBody");
+    const statusIndicator = document.getElementById("statusIndicator");
+    const lastUpdate = document.getElementById("lastUpdate");
+    const exportBtn = document.getElementById("exportBtn");
+    const notification = document.getElementById("notification");
+
+    let allData = {};
+    let currentSort = { column: 'apr', direction: 'desc' };
+    let filteredData = [];
+
+    // Application state
+    const appState = {
+      isLoading: false,
+      lastUpdate: null,
+      connectionStatus: 'connected',
+      updateInterval: null
+    };
+
+    // Utility functions
+    const debounce = (func, wait) => {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    };
+
+    const showNotification = (message, type = 'success') => {
+      notification.textContent = message;
+      notification.className = `notification ${type}`;
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3000);
+    };
+
+    const updateLoadingState = () => {
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        if (appState.isLoading) {
+          card.classList.add('loading');
+          statusIndicator.className = 'status-indicator loading';
+        } else {
+          card.classList.remove('loading');
+          statusIndicator.className = `status-indicator ${appState.connectionStatus}`;
+        }
+      });
+    };
+
+    const updateLastUpdateTime = () => {
+      if (appState.lastUpdate) {
+        const now = new Date();
+        const diff = Math.floor((now - appState.lastUpdate) / 1000);
+        if (diff < 60) {
+          lastUpdate.textContent = `Last update: ${diff}s ago`;
+        } else {
+          lastUpdate.textContent = `Last update: ${Math.floor(diff / 60)}m ago`;
+        }
+      }
+    };
+
+    // Theme management - fixed version
+    function toggleTheme() {
+      console.log("Toggle theme clicked!");
+      
+      isDarkTheme = !isDarkTheme;
+      const newTheme = isDarkTheme ? 'dark' : 'light';
+      
+      console.log("Switching to theme:", newTheme);
+      
+      // Apply theme to document
+      document.documentElement.setAttribute('data-theme', newTheme);
+      
+      // Update button text
+      if (themeToggle) {
+        themeToggle.textContent = isDarkTheme ? '☀️ Light Mode' : '🌓 Dark Mode';
+      }
+      
+      // Show notification
+      showNotification(`Switched to ${newTheme} theme`);
+    }
+
+    // Wait for DOM to be ready and attach event listener
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+      console.log("Theme toggle event listener attached");
+    } else {
+      console.error("Theme toggle button not found!");
+    }
+
+    // Fetch data with improved error handling
+    async function fetchData() {
+      appState.isLoading = true;
+      updateLoadingState();
+      
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        
+        const res = await fetch("https://api.afra.finance/opportunities", {
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+        
+        const json = await res.json();
+        allData = json.result.table || {};
+        
+        appState.lastUpdate = new Date();
+        appState.connectionStatus = 'connected';
+        
+        populatePairs();
+        renderTable();
+        renderTopOpportunity();
+        
+        if (Object.keys(allData).length === 0) {
+          showNotification("No data available", "error");
+        }
+        
+      } catch (err) {
+        console.error("❌ Fetch error:", err);
+        appState.connectionStatus = 'offline';
+        
+        let errorMessage = "Connection error";
+        if (err.name === 'AbortError') {
+          errorMessage = "Request timeout";
+        } else if (err.message.includes('HTTP')) {
+          errorMessage = `Server error: ${err.message}`;
+        }
+        
+        showNotification(errorMessage, "error");
+        
+        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">❌ ${errorMessage}</td></tr>`;
+        topOpportunityTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">❌ ${errorMessage}</td></tr>`;
+      } finally {
+        appState.isLoading = false;
+        updateLoadingState();
+      }
+    }
+
+    // Populate pair select with improved UX
+    function populatePairs() {
+      const currentValue = pairSelect.value;
+      pairSelect.innerHTML = "";
+
+      const allOpt = document.createElement("option");
+      allOpt.value = "ALL";
+      allOpt.textContent = `All (${Object.keys(allData).length})`;
+      pairSelect.appendChild(allOpt);
+
+      Object.keys(allData).forEach((pair) => {
+        const opt = document.createElement("option");
+        opt.value = pair;
+        opt.textContent = pair;
+        pairSelect.appendChild(opt);
+      });
+      
+      // Restore previous selection if possible
+      if (currentValue && [...pairSelect.options].some(opt => opt.value === currentValue)) {
+        pairSelect.value = currentValue;
+      }
+    }
+
+    // Get selected DEXs
+    function getSelectedDEXs() {
+      return Array.from(dexCheckboxes)
+        .filter((cb) => cb.checked)
+        .map((cb) => cb.value);
+    }
+
+    // Enhanced filtering and sorting
+    function getFilteredRows() {
+      const selectedPair = pairSelect.value;
+      const risk = riskSelect.value;
+      const searchTerm = pairSearch.value.toLowerCase().trim();
+      const selectedDEXs = getSelectedDEXs();
+
+      let rows = [];
+
+      Object.entries(allData).forEach(([pair, opportunities]) => {
+        const matchesSearch = !searchTerm || pair.toLowerCase().includes(searchTerm);
+        const matchesPair = selectedPair === "ALL" || selectedPair === pair;
+
+        if (!matchesSearch || !matchesPair) return;
+
+        opportunities.forEach((item) => {
+          const validRisk = risk === "ALL" || item.risk_level === risk;
+          const dexOK = selectedDEXs.includes(item.long_dex) && selectedDEXs.includes(item.short_dex);
+          const aprOK = item.net_apr > 5;
+
+          if (validRisk && dexOK && aprOK) {
+            rows.push(item);
+          }
+        });
+      });
+
+      // Apply sorting
+      rows.sort((a, b) => {
+        let aVal = a[currentSort.column === 'apr' ? 'net_apr' : currentSort.column === 'long' ? 'long_dex' : currentSort.column === 'short' ? 'short_dex' : currentSort.column === 'risk' ? 'risk_level' : 'pair'];
+        let bVal = b[currentSort.column === 'apr' ? 'net_apr' : currentSort.column === 'long' ? 'long_dex' : currentSort.column === 'short' ? 'short_dex' : currentSort.column === 'risk' ? 'risk_level' : 'pair'];
+        
+        if (currentSort.column === 'apr') {
+          return currentSort.direction === 'desc' ? bVal - aVal : aVal - bVal;
+        } else {
+          if (typeof aVal === 'string') aVal = aVal.toLowerCase();
+          if (typeof bVal === 'string') bVal = bVal.toLowerCase();
+          if (aVal < bVal) return currentSort.direction === 'desc' ? 1 : -1;
+          if (aVal > bVal) return currentSort.direction === 'desc' ? -1 : 1;
+          return 0;
+        }
+      });
+
+      filteredData = rows;
+      return rows;
+    }
+
+    // Enhanced rendering with colors and risk indicators
+    function renderTopOpportunity() {
+      const rows = getFilteredRows();
+
+      if (rows.length === 0) {
+        topOpportunityTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No top opportunity found</td></tr>`;
+        return;
+      }
+
+      const best = rows[0];
+      const aprClass = best.net_apr > 20 ? 'apr-high' : 'apr-value';
+      
+      topOpportunityTableBody.innerHTML = `
+        <tr>
+          <td><strong>${best.pair}</strong></td>
+          <td class="${aprClass}">+${best.net_apr.toFixed(2)}</td>
+          <td class="dex-long">${best.long_dex}</td>
+          <td class="dex-short">${best.short_dex}</td>
+          <td class="risk-indicator risk-${best.risk_level.toLowerCase()}">${best.risk_level}</td>
+        </tr>
+      `;
+    }
+
+    function renderTable() {
+      const rows = getFilteredRows();
+
+      if (rows.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No opportunities found with current filters</td></tr>`;
+        return;
+      }
+
+      tableBody.innerHTML = rows
+        .map((opp) => {
+          const aprClass = opp.net_apr > 20 ? 'apr-high' : 'apr-value';
+          return `
+            <tr>
+              <td><strong>${opp.pair}</strong></td>
+              <td class="dex-long">${opp.long_dex}</td>
+              <td class="dex-short">${opp.short_dex}</td>
+              <td class="${aprClass}">${opp.net_apr.toFixed(2)}</td>
+              <td class="risk-indicator risk-${opp.risk_level.toLowerCase()}">${opp.risk_level}</td>
+            </tr>
+          `;
+        })
+        .join("");
+    }
+
+    // Table sorting functionality
+    document.querySelectorAll('th.sortable').forEach(th => {
+      th.addEventListener('click', () => {
+        const column = th.dataset.column;
+        
+        if (currentSort.column === column) {
+          currentSort.direction = currentSort.direction === 'desc' ? 'asc' : 'desc';
+        } else {
+          currentSort.column = column;
+          currentSort.direction = column === 'apr' ? 'desc' : 'asc';
+        }
+        
+        // Update visual indicators
+        document.querySelectorAll('th.sortable').forEach(header => {
+          header.classList.remove('sort-asc', 'sort-desc');
+        });
+        
+        th.classList.add(currentSort.direction === 'desc' ? 'sort-desc' : 'sort-asc');
+        
+        renderTable();
+        renderTopOpportunity();
+        
+        showNotification(`Sorted by ${column} ${currentSort.direction === 'desc' ? '↓' : '↑'}`);
+      });
+    });
+
+    // Export functionality
+    function exportToCSV() {
+      if (filteredData.length === 0) {
+        showNotification("No data to export", "error");
+        return;
+      }
+      
+      const headers = ['Pair', 'Long DEX', 'Short DEX', 'APR (%)', 'Risk Level'];
+      const csvContent = [
+        headers.join(','),
+        ...filteredData.map(row => [
+          row.pair,
+          row.long_dex,
+          row.short_dex,
+          row.net_apr.toFixed(2),
+          row.risk_level
+        ].join(','))
+      ].join('\n');
+      
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `afra-opportunities-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      showNotification(`Exported ${filteredData.length} opportunities`);
+    }
+
+    // Event listeners with debouncing
+    const debouncedRender = debounce(() => {
+      renderTable();
+      renderTopOpportunity();
+    }, 300);
+
+    pairSelect.addEventListener("change", debouncedRender);
+    riskSelect.addEventListener("change", debouncedRender);
+    pairSearch.addEventListener("input", debouncedRender);
+    exportBtn.addEventListener("click", exportToCSV);
+
+    dexCheckboxes.forEach((cb) => cb.addEventListener("change", debouncedRender));
+
+    // Initialize theme to light mode (fixed theme)
+    document.documentElement.setAttribute('data-theme', 'light');
+
+    // Initialize and set up intervals
+    fetchData();
+    
+    // Update time display every 30 seconds
+    setInterval(updateLastUpdateTime, 30000);
+    
+    // Fetch data every 30 seconds
+    appState.updateInterval = setInterval(fetchData, 30000);
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      if (appState.updateInterval) {
+        clearInterval(appState.updateInterval);
+      }
+    });
+
+    // Initial time update
+    updateLastUpdateTime();
+  </script>
+
 </body>
 </html>

@@ -124,12 +124,12 @@ pm2 start runner/bridge/webhook.py --interpreter python3 --name ao-api-server
 
 ---
 
-### 🖼️ Frontend (Vanilla JS + HTML + CSS)
+### 🖼️ Frontend (HTML)
 
 - Located in `front-end/`
 - Static SPA dashboard (no framework)
 - Fetches from Flask API endpoint (or your own)
-- Supports dark/light themes, filters, search, top APR
+- Supports filters, search, top APR
 
 No build needed. Just serve the folder with any static server:
 

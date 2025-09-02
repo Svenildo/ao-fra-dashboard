@@ -8,15 +8,14 @@ The dashboard displays:
 - The top opportunity with the best net APR
 - A searchable, filterable table of all current opportunities
 - Filtering by pair, DEX, and risk level
-- Dark/light mode toggle (theme saved in localStorage)
 
 Files
 -----
 
 front-end/
 ├── index.html       # Main HTML page with layout and containers
-├── script.js        # Client-side logic (data fetching, filtering, rendering)
-└── style.css        # Theme styling, responsive design, and light/dark support
+                     # Client-side logic (data fetching, filtering, rendering)
+                     # Theme styling, responsive design, and light/dark support
 
 Hosting Instructions
 --------------------
@@ -34,7 +33,7 @@ Dependencies
 No external JavaScript dependencies are required.
 The app uses:
 - `fetch()` for API requests
-- Vanilla JavaScript and CSS
+-
 - LocalStorage for theme persistence
 
 API Endpoint
@@ -42,7 +41,7 @@ API Endpoint
 
 The dashboard expects the following API endpoint:
 
-  https://api.afra.finance/opportunities
+  https://your.api.12345
 
 This should return a JSON object like:
 
@@ -73,7 +72,5 @@ Features
 --------
 
 - Fully responsive layout
-- Minimalistic design with CSS variables
-- Dark/light theme toggle (🌓 button)
 - Search, filter by pair, risk level, and DEX
 - Updates data every 30 seconds
